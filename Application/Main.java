@@ -29,20 +29,16 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args)
-            throws Exception {
+    public static void main(String[] args) throws Exception {
 
         // Scanner para leitura do teclado
-        Scanner scanner =
-                new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
 
         // Service responsável pela PokéAPI
-        PokemonService service =
-                new PokemonService();
+        PokemonService service = new PokemonService();
 
         // Banco de dados
-        PokemonRepository repository =
-                new PokemonRepository();
+        PokemonRepository repository = new PokemonRepository();
 
         /*
             ==================================================
@@ -57,8 +53,7 @@ public class Main {
         System.out.println("1 - Novo Jogo");
         System.out.println("2 - Carregar Jogo");
 
-        int opcao =
-                scanner.nextInt();
+        int opcao = scanner.nextInt();
 
         scanner.nextLine();
 
@@ -70,23 +65,16 @@ public class Main {
             ==================================================
         */
         if (opcao == 2) {
-
-            jogador =
-                    repository.carregar();
+            jogador = repository.carregar();
 
             // Caso não exista save
             if (jogador == null) {
-
-                System.out.println(
-                        "Nenhum save encontrado."
-                );
+                System.out.println("Nenhum save encontrado.");
 
                 return;
             }
 
-            System.out.println(
-                    "Jogo carregado com sucesso!"
-            );
+            System.out.println("Jogo carregado com sucesso!");
         }
 
         /*
@@ -108,33 +96,17 @@ public class Main {
             /*
                 Mostra os 3 Pokémons
             */
-            for (int i = 0;
-                 i < iniciais.length;
-                 i++) {
+            for (int i = 0; i < iniciais.length; i++) {
 
-                Pokemon p =
-                        iniciais[i];
+                Pokemon p = iniciais[i];
 
-                System.out.println(
-                        (i + 1)
-                                + " - "
-                                + p.getNome()
-                );
+                System.out.println((i + 1) + " - " + p.getNome());
 
-                System.out.println(
-                        "HP: "
-                                + p.getHpMax()
-                );
+                System.out.println("HP: " + p.getHpMax());
 
-                System.out.println(
-                        "ATK: "
-                                + p.getAtaque()
-                );
+                System.out.println("ATK: " + p.getAtaque());
 
-                System.out.println(
-                        "DEF: "
-                                + p.getDefesa()
-                );
+                System.out.println("DEF: " + p.getDefesa());
 
                 System.out.println("-------------------");
             }
@@ -142,27 +114,18 @@ public class Main {
             /*
                 Jogador escolhe
             */
-            int escolha =
-                    scanner.nextInt();
+            int escolha = scanner.nextInt();
 
             scanner.nextLine();
 
-            Pokemon pokemonEscolhido =
-                    iniciais[escolha - 1];
+            Pokemon pokemonEscolhido = iniciais[escolha - 1];
 
             /*
                 Cria jogador
             */
-            jogador =
-                    new Jogador(
-                            pokemonEscolhido
-                    );
+            jogador = new Jogador(pokemonEscolhido);
 
-            System.out.println(
-                    "\nVocê escolheu "
-                            + pokemonEscolhido.getNome()
-                            + "!"
-            );
+            System.out.println("\nVocê escolheu " + pokemonEscolhido.getNome() + "!");
         }
 
         /*
@@ -178,8 +141,7 @@ public class Main {
             System.out.println("3 - Sair");
             System.out.println("========================");
 
-            int menu =
-                    scanner.nextInt();
+            int menu = scanner.nextInt();
 
             scanner.nextLine();
 
@@ -194,41 +156,21 @@ public class Main {
                     Gera inimigo aleatório
                     próximo do level do jogador
                 */
-                Pokemon inimigo =
-                        service.gerarInimigo(
-                                jogador
-                                        .getPokemon()
-                                        .getLevel()
-                        );
+                Pokemon inimigo = service.gerarInimigo(jogador.getPokemon().getLevel());
 
-                System.out.println(
-                        "\nUm "
-                                + inimigo.getNome()
-                                + " apareceu!"
-                );
+                System.out.println("\nUm " + inimigo.getNome() + " apareceu!");
 
                 /*
                     Inicia batalha
                 */
-                Batalha batalha =
-                        new Batalha(
-                                jogador,
-                                inimigo
-                        );
-
+                Batalha batalha = new Batalha(jogador, inimigo);
                 batalha.iniciar();
 
                 /*
                     Verifica derrota
                 */
-                if (jogador
-                        .getPokemon()
-                        .estaDerrotado()) {
-
-                    System.out.println(
-                            "\nSeu Pokémon foi derrotado."
-                    );
-
+                if (jogador.getPokemon().estaDerrotado()) {
+                    System.out.println("\nSeu Pokémon foi derrotado.");
                     break;
                 }
             }
@@ -242,9 +184,7 @@ public class Main {
 
                 repository.salvar(jogador);
 
-                System.out.println(
-                        "Jogo salvo com sucesso!"
-                );
+                System.out.println("Jogo salvo com sucesso!");
             }
 
             /*
@@ -254,10 +194,7 @@ public class Main {
             */
             else if (menu == 3) {
 
-                System.out.println(
-                        "Encerrando jogo..."
-                );
-
+                System.out.println("Encerrando jogo...");
                 break;
             }
 
@@ -268,9 +205,7 @@ public class Main {
             */
             else {
 
-                System.out.println(
-                        "Opção inválida."
-                );
+                System.out.println("Opção inválida.");
             }
         }
 

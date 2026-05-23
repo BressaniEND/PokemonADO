@@ -30,21 +30,20 @@ import java.sql.*;
 
 public class PokemonRepository {
 
-    /*
-        URL banco H2
-    */
+
+        //URL banco H2
+
     private static final String URL =
             "jdbc:h2:./pokemon_db";
 
-    /*
-        Usuário padrão H2
-    */
+
+        //Usuário padrão H2
+
     private static final String USER =
             "sa";
 
-    /*
-        Senha padrão H2
-    */
+        //Senha padrão H2
+
     private static final String PASSWORD =
             "";
 
@@ -56,19 +55,15 @@ public class PokemonRepository {
         CONSTRUTOR
         ======================================================
     */
-    public PokemonRepository()
-            throws SQLException {
+    public PokemonRepository() throws SQLException {
 
-        connection =
-                DriverManager.getConnection(
+        connection = DriverManager.getConnection(
                         URL,
                         USER,
                         PASSWORD
                 );
 
-        System.out.println(
-                "Banco conectado com sucesso!"
-        );
+        System.out.println("Banco conectado com sucesso!");
 
         criarTabelas();
     }
@@ -80,8 +75,7 @@ public class PokemonRepository {
     */
     private void criarTabelas() {
 
-        try (Statement st =
-                     connection.createStatement()) {
+        try (Statement st = connection.createStatement()) {
 
             /*
                 ==============================================
@@ -327,8 +321,7 @@ public class PokemonRepository {
                 SALVA TIPOS
                 ==============================================
             */
-            for (String tipo
-                    : p.getTipos()) {
+            for (String tipo : p.getTipos()) {
 
                 try (PreparedStatement pstmt =
                              connection.prepareStatement("""
@@ -340,23 +333,15 @@ public class PokemonRepository {
                                      VALUES (?, ?)
                                      """)) {
 
-                    pstmt.setString(
-                            1,
-                            p.getNome()
-                    );
+                    pstmt.setString(1, p.getNome());
 
-                    pstmt.setString(
-                            2,
-                            tipo
-                    );
+                    pstmt.setString(2, tipo);
 
                     pstmt.executeUpdate();
                 }
             }
 
-            System.out.println(
-                    "Jogo salvo com sucesso!"
-            );
+            System.out.println("Jogo salvo com sucesso!");
         }
 
         catch (SQLException e) {
@@ -365,8 +350,7 @@ public class PokemonRepository {
                     "Erro ao salvar jogo."
             );
 
-            System.out.println(
-                    e.getMessage()
+            System.out.println(e.getMessage()
             );
         }
     }
@@ -383,11 +367,9 @@ public class PokemonRepository {
             /*
                 Busca save
             */
-            try (Statement st =
-                         connection.createStatement()) {
+            try (Statement st = connection.createStatement()) {
 
-                ResultSet rs =
-                        st.executeQuery(
+                ResultSet rs = st.executeQuery(
                                 "SELECT * FROM jogador LIMIT 1"
                         );
 
@@ -402,8 +384,7 @@ public class PokemonRepository {
                 /*
                     Cria Pokémon
                 */
-                Pokemon pokemon =
-                        new Pokemon(
+                Pokemon pokemon = new Pokemon(
                                 rs.getString(
                                         "nome_pokemon"
                                 ),
@@ -428,13 +409,9 @@ public class PokemonRepository {
                 /*
                     Recupera HP e XP
                 */
-                pokemon.setHp(
-                        rs.getInt("hp")
-                );
+                pokemon.setHp(rs.getInt("hp"));
 
-                pokemon.setXp(
-                        rs.getInt("xp")
-                );
+                pokemon.setXp(rs.getInt("xp"));
 
                 /*
                     ==========================================
@@ -447,49 +424,28 @@ public class PokemonRepository {
                                      WHERE pokemon_nome = ?
                                      """)) {
 
-                    pstmt.setString(
-                            1,
-                            pokemon.getNome()
-                    );
+                    pstmt.setString(1, pokemon.getNome());
 
-                    ResultSet movs =
-                            pstmt.executeQuery();
+                    ResultSet movs = pstmt.executeQuery();
 
                     while (movs.next()) {
 
-                        Movimento movimento =
-                                new Movimento(
+                        Movimento movimento = new Movimento(
 
-                                        movs.getString(
-                                                "nome"
-                                        ),
+                                        movs.getString("nome"),
 
-                                        movs.getString(
-                                                "tipo"
-                                        ),
+                                        movs.getString("tipo"),
 
-                                        movs.getInt(
-                                                "dano"
-                                        ),
+                                        movs.getInt("dano"),
 
-                                        movs.getInt(
-                                                "precisao"
-                                        ),
+                                        movs.getInt("precisao"),
 
-                                        movs.getInt(
-                                                "pp_max"
-                                        )
-                                );
-
-                        movimento.setPpAtual(
-                                movs.getInt(
-                                        "pp_atual"
-                                )
+                                        movs.getInt("pp_max")
                         );
 
-                        pokemon.adicionarMovimento(
-                                movimento
-                        );
+                        movimento.setPpAtual(movs.getInt("pp_atual"));
+
+                        pokemon.adicionarMovimento(movimento);
                     }
                 }
 
@@ -498,57 +454,38 @@ public class PokemonRepository {
                     CARREGA TIPOS
                     ==========================================
                 */
-                try (PreparedStatement pstmt =
-                             connection.prepareStatement("""
+                try (PreparedStatement pstmt = connection.prepareStatement("""
                                      SELECT * FROM tipos
                                      WHERE pokemon_nome = ?
                                      """)) {
 
-                    pstmt.setString(
-                            1,
-                            pokemon.getNome()
-                    );
+                    pstmt.setString(1, pokemon.getNome());
 
-                    ResultSet tipos =
-                            pstmt.executeQuery();
+                    ResultSet tipos = pstmt.executeQuery();
 
                     while (tipos.next()) {
 
-                        pokemon.adicionarTipo(
-                                tipos.getString(
-                                        "tipo"
-                                )
-                        );
+                        pokemon.adicionarTipo(tipos.getString("tipo"));
                     }
                 }
 
                 /*
                     Cria jogador
                 */
-                Jogador jogador =
-                        new Jogador(pokemon);
+                Jogador jogador = new Jogador(pokemon);
 
-                jogador.setPocoes(
-                        rs.getInt("pocoes")
-                );
+                jogador.setPocoes(rs.getInt("pocoes"));
 
-                System.out.println(
-                        "Save carregado com sucesso!"
-                );
+                System.out.println("Save carregado com sucesso!");
 
                 return jogador;
             }
         }
 
         catch (SQLException e) {
+            System.out.println("Erro ao carregar save.");
 
-            System.out.println(
-                    "Erro ao carregar save."
-            );
-
-            System.out.println(
-                    e.getMessage()
-            );
+            System.out.println(e.getMessage());
 
             return null;
         }

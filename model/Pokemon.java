@@ -61,33 +61,20 @@ public class Pokemon {
         CONSTRUTOR
         ======================================================
     */
-    public Pokemon(String nome,
-                   int level,
-                   int hpMax,
-                   int ataque,
-                   int defesa) {
-
+    public Pokemon(String nome, int level, int hpMax, int ataque, int defesa) {
         this.nome = nome;
-
         this.level = level;
-
         this.hpMax = hpMax;
 
         // Pokémon começa com HP cheio
         this.hp = hpMax;
-
         this.ataque = ataque;
-
         this.defesa = defesa;
-
         this.xp = 0;
 
         // Inicializa listas
-        this.tipos =
-                new ArrayList<>();
-
-        this.movimentos =
-                new ArrayList<>();
+        this.tipos = new ArrayList<>();
+        this.movimentos = new ArrayList<>();
     }
 
     /*
@@ -96,14 +83,12 @@ public class Pokemon {
         ======================================================
     */
     public void receberDano(int dano) {
-
         hp -= dano;
 
         /*
             Evita HP negativo
         */
         if (hp < 0) {
-
             hp = 0;
         }
     }
@@ -114,14 +99,12 @@ public class Pokemon {
         ======================================================
     */
     public void curar(int valor) {
-
         hp += valor;
 
         /*
             Não ultrapassa HP máximo
         */
         if (hp > hpMax) {
-
             hp = hpMax;
         }
     }
@@ -132,7 +115,6 @@ public class Pokemon {
         ======================================================
     */
     public boolean estaDerrotado() {
-
         return hp <= 0;
     }
 
@@ -151,18 +133,9 @@ public class Pokemon {
     */
         xp += valor;
 
-        System.out.println(
-                nome
-                        + " ganhou "
-                        + valor
-                        + " XP!"
-        );
+        System.out.println(nome + " ganhou " + valor + " XP!");
 
-        System.out.println(
-                "XP Atual: "
-                        + xp
-                        + "/100"
-        );
+        System.out.println("XP Atual: " + xp + "/100");
 
     /*
         Verifica level up
@@ -238,8 +211,7 @@ public class Pokemon {
         ADICIONA MOVIMENTO
         ======================================================
     */
-    public void adicionarMovimento(
-            Movimento movimento) {
+    public void adicionarMovimento(Movimento movimento) {
 
         movimentos.add(movimento);
     }
@@ -250,7 +222,6 @@ public class Pokemon {
         ======================================================
     */
     public void adicionarTipo(String tipo) {
-
         tipos.add(tipo);
     }
 
@@ -261,37 +232,30 @@ public class Pokemon {
     */
 
     public String getNome() {
-
         return nome;
     }
 
     public void setNome(String nome) {
-
         this.nome = nome;
     }
 
     public int getLevel() {
-
         return level;
     }
 
     public void setLevel(int level) {
-
         this.level = level;
     }
 
     public int getHp() {
-
         return hp;
     }
 
     public void setHp(int hp) {
-
         this.hp = hp;
     }
 
     public int getHpMax() {
-
         return hpMax;
     }
 
@@ -345,8 +309,7 @@ public class Pokemon {
         return movimentos;
     }
 
-    public void setMovimentos(
-            List<Movimento> movimentos) {
+    public void setMovimentos(List<Movimento> movimentos) {
 
         this.movimentos = movimentos;
     }

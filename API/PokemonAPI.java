@@ -7,36 +7,20 @@ import java.net.http.HttpResponse;
 
 public class PokemonAPI {
 
-    private static final String URL =
-            "https://pokeapi.co/api/v2/";
+    private static final String URL = "https://pokeapi.co/api/v2/";
 
     private final HttpClient client;
 
     public PokemonAPI() {
 
-        this.client =
-                HttpClient.newHttpClient();
+        this.client = HttpClient.newHttpClient();
     }
 
-    public String get(String endpoint)
-            throws Exception {
+    public String get(String endpoint) throws Exception {
 
-        HttpRequest request =
-                HttpRequest.newBuilder()
-                        .uri(
-                                URI.create(
-                                        URL + endpoint
-                                )
-                        )
-                        .GET()
-                        .build();
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(URL + endpoint)).GET().build();
 
-        HttpResponse<String> response =
-                client.send(
-                        request,
-                        HttpResponse.BodyHandlers
-                                .ofString()
-                );
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 200) {
 
@@ -51,8 +35,7 @@ public class PokemonAPI {
     /*
         Busca Pokémon pelo nome
     */
-    public String buscarPokemon(String nome)
-            throws Exception {
+    public String buscarPokemon(String nome) throws Exception {
 
         return get("pokemon/" + nome);
     }
@@ -60,8 +43,7 @@ public class PokemonAPI {
     /*
         Busca Pokémon por ID
     */
-    public String buscarPokemonPorId(int id)
-            throws Exception {
+    public String buscarPokemonPorId(int id) throws Exception {
 
         return get("pokemon/" + id);
     }
@@ -69,8 +51,7 @@ public class PokemonAPI {
     /*
         Busca movimento
     */
-    public String buscarMovimento(String nome)
-            throws Exception {
+    public String buscarMovimento(String nome) throws Exception {
 
         return get("move/" + nome);
     }
@@ -78,8 +59,7 @@ public class PokemonAPI {
     /*
         Busca evolução
     */
-    public String buscarEvolucao(int id)
-            throws Exception {
+    public String buscarEvolucao(int id) throws Exception {
 
         return get("evolution-chain/" + id);
     }
@@ -87,11 +67,9 @@ public class PokemonAPI {
     /*
         Busca species do Pokémon
     */
-    public String buscarSpecies(int id)
-            throws Exception {
+    public String buscarSpecies(int id) throws Exception {
 
-        return get(
-                "pokemon-species/" + id
+        return get("pokemon-species/" + id
         );
     }
 }

@@ -260,32 +260,19 @@ public class PokemonService {
 
         try {
 
-            String json =
-                    api.buscarMovimento(
-                            nomeMovimento
-                    );
+            String json = api.buscarMovimento(nomeMovimento);
 
-            MoveResponse response =
-                    gson.fromJson(
-                            json,
-                            MoveResponse.class
-                    );
+            MoveResponse response = gson.fromJson(json, MoveResponse.class);
 
             /*
                 Alguns golpes possuem power null
             */
-            int dano =
-                    response.power == 0
-                            ? 40
-                            : response.power;
+            int dano = response.power == 0 ? 40 : response.power;
 
             /*
                 Alguns golpes possuem accuracy null
             */
-            int precisao =
-                    response.accuracy == 0
-                            ? 100
-                            : response.accuracy;
+            int precisao = response.accuracy == 0 ? 100 : response.accuracy;
 
             return new Movimento(
                     response.name,
@@ -310,11 +297,9 @@ public class PokemonService {
     */
     public Pokemon[] gerarIniciais() {
 
-        Pokemon[] escolha =
-                new Pokemon[3];
+        Pokemon[] escolha = new Pokemon[3];
 
-        Set<Integer> usados =
-                new HashSet<>();
+        Set<Integer> usados = new HashSet<>();
 
         int i = 0;
 
@@ -323,8 +308,7 @@ public class PokemonService {
             /*
                 Sorteia ID entre 1 e 150
             */
-            int id =
-                    random.nextInt(150) + 1;
+            int id = random.nextInt(150) + 1;
 
             /*
                 Evita repetidos
@@ -342,10 +326,7 @@ public class PokemonService {
 
             usados.add(id);
 
-            escolha[i] =
-                    buscarPokemon(
-                            String.valueOf(id)
-                    );
+            escolha[i] = buscarPokemon(String.valueOf(id));
 
             i++;
         }
@@ -354,40 +335,58 @@ public class PokemonService {
     }
 
     /*
-        ======================================================
-        GERA INIMIGO ALEATÓRIO
+    ======================================================
+    GERA INIMIGO ALEATÓRIO
 
-        Entre os 150 primeiros
-        com level semelhante
-        ao do jogador.
-        ======================================================
-    */
+    O inimigo terá:
+    - level parecido com o jogador
+    - atributos escalando por nível
+    ======================================================
+*/
     public Pokemon gerarInimigo(
             int levelJogador) {
 
-        /*
-            Sorteia Pokémon
-        */
-        int id =
-                random.nextInt(150) + 1;
+    /*
+        Sorteia Pokémon
+    */
+        int id = random.nextInt(150) + 1;
+        Pokemon inimigo = buscarPokemon(String.valueOf(id));
 
-        Pokemon inimigo =
-                buscarPokemon(
-                        String.valueOf(id)
-                );
+    /*
+        Pequena variação de level
+    */
+        int variacao = random.nextInt(3) - 1;
 
-        /*
-            Ajusta level
-        */
-        int variacao =
-                random.nextInt(3) - 1;
+        int novoLevel = Math.max(1, levelJogador + variacao);
 
-        inimigo.setLevel(
-                Math.max(
-                        1,
-                        levelJogador + variacao
-                )
-        );
+    /*
+        Calcula diferença
+        do level base 5
+    */
+        int diferenca = novoLevel - 5;
+
+    /*
+        Atualiza level
+    */
+        inimigo.setLevel(novoLevel);
+    /*
+        Escala stats
+
+        HP aumenta 1.5%
+        por nível.
+    */
+        for (int i = 0; i < diferenca; i++) {
+            inimigo.setHpMax(inimigo.getHpMax() + (int)(inimigo.getHpMax() * 0.015));
+
+            inimigo.setAtaque(inimigo.getAtaque() + 2);
+
+            inimigo.setDefesa(inimigo.getDefesa() + 2);
+        }
+
+    /*
+        Recupera HP total
+    */
+        inimigo.setHp(inimigo.getHpMax());
 
         return inimigo;
     }
@@ -401,27 +400,18 @@ public class PokemonService {
         ======================================================
     */
     public void evoluirPokemon(
-            Pokemon pokemon,
-            int evolutionId) {
+            Pokemon pokemon, int evolutionId) {
 
         try {
 
-            String json =
-                    api.buscarEvolucao(
-                            evolutionId
-                    );
+            String json = api.buscarEvolucao(evolutionId);
 
-            EvolutionResponse response =
-                    gson.fromJson(
-                            json,
-                            EvolutionResponse.class
-                    );
+            EvolutionResponse response = gson.fromJson(json, EvolutionResponse.class);
 
             /*
                 Verifica próxima evolução
             */
-            if (response.chain.evolves_to
-                    .isEmpty()) {
+            if (response.chain.evolves_to.isEmpty()) {
 
                 return;
             }
@@ -429,8 +419,7 @@ public class PokemonService {
             /*
                 Nome evolução
             */
-            String evolucao =
-                    response.chain
+            String evolucao = response.chain
                             .evolves_to
                             .get(0)
                             .species
@@ -446,38 +435,22 @@ public class PokemonService {
             /*
                 Buff stats
             */
-            pokemon.setHpMax(
-                    pokemon.getHpMax() + 30
-            );
+            pokemon.setHpMax(pokemon.getHpMax() + 30);
 
-            pokemon.setAtaque(
-                    pokemon.getAtaque() + 15
-            );
+            pokemon.setAtaque(pokemon.getAtaque() + 15);
 
-            pokemon.setDefesa(
-                    pokemon.getDefesa() + 15
-            );
+            pokemon.setDefesa(pokemon.getDefesa() + 15);
 
-            System.out.println(
-                    "\n================================="
-            );
+            System.out.println("\n=================================");
 
-            System.out.println(
-                    "Seu Pokémon evoluiu para "
-                            + evolucao
-                            + "!"
-            );
+            System.out.println("Seu Pokémon evoluiu para " + evolucao + "!");
 
-            System.out.println(
-                    "================================="
-            );
+            System.out.println("=================================");
         }
 
         catch (Exception e) {
 
-            System.out.println(
-                    "Erro ao evoluir Pokémon."
-            );
+            System.out.println("Erro ao evoluir Pokémon.");
         }
     }
 }

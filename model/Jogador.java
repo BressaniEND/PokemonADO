@@ -53,10 +53,7 @@ public class Jogador {
             Verifica se possui poções
         */
         if (pocoes <= 0) {
-
-            System.out.println(
-                    "Você não possui poções."
-            );
+            System.out.println("Você não possui poções.");
 
             return;
         }
@@ -71,15 +68,9 @@ public class Jogador {
         */
         pokemon.curar(50);
 
-        System.out.println(
-                pokemon.getNome()
-                        + " recuperou 50 HP!"
-        );
+        System.out.println(pokemon.getNome() + " recuperou 50 HP!");
 
-        System.out.println(
-                "Poções restantes: "
-                        + pocoes
-        );
+        System.out.println("Poções restantes: " + pocoes);
     }
 
     /*

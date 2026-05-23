@@ -45,20 +45,11 @@ public class Movimento {
         CONSTRUTOR
         ======================================================
     */
-    public Movimento(String nome,
-                     String tipo,
-                     int dano,
-                     int precisao,
-                     int ppMax) {
-
+    public Movimento(String nome, String tipo, int dano, int precisao, int ppMax) {
         this.nome = nome;
-
         this.tipo = tipo;
-
         this.dano = dano;
-
         this.precisao = precisao;
-
         this.ppMax = ppMax;
 
         // Começa com PP cheio
@@ -98,7 +89,6 @@ public class Movimento {
         ======================================================
     */
     public void restaurarPP() {
-
         this.ppAtual = ppMax;
     }
 
@@ -109,62 +99,50 @@ public class Movimento {
     */
 
     public String getNome() {
-
         return nome;
     }
 
     public void setNome(String nome) {
-
         this.nome = nome;
     }
 
     public String getTipo() {
-
         return tipo;
     }
 
     public void setTipo(String tipo) {
-
         this.tipo = tipo;
     }
 
     public int getDano() {
-
         return dano;
     }
 
     public void setDano(int dano) {
-
         this.dano = dano;
     }
 
     public int getPrecisao() {
-
         return precisao;
     }
 
     public void setPrecisao(int precisao) {
-
         this.precisao = precisao;
     }
 
     public int getPpAtual() {
-
         return ppAtual;
     }
 
     public void setPpAtual(int ppAtual) {
-
         this.ppAtual = ppAtual;
     }
 
     public int getPpMax() {
-
         return ppMax;
     }
 
     public void setPpMax(int ppMax) {
-
         this.ppMax = ppMax;
     }
 }

@@ -61,7 +61,6 @@ public class EvolutionResponse {
         ======================================================
     */
     public static class Species {
-
         /*
             Nome do Pokémon
         */

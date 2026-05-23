@@ -40,21 +40,21 @@ public class Batalha {
     // Random para precisão
     private final Random random;
 
+    // Máximo de tentativas de fuga
+    private int tentativasFuga = 4;
+
     /*
         Construtor
     */
-    public Batalha(Jogador jogador,
-                   Pokemon inimigo) {
+    public Batalha(Jogador jogador, Pokemon inimigo) {
 
         this.jogador = jogador;
 
         this.inimigo = inimigo;
 
-        this.scanner =
-                new Scanner(System.in);
+        this.scanner = new Scanner(System.in);
 
-        this.random =
-                new Random();
+        this.random = new Random();
     }
 
     /*
@@ -72,9 +72,7 @@ public class Batalha {
             Loop principal da batalha
         */
         while (true) {
-
-            Pokemon pokemonJogador =
-                    jogador.getPokemon();
+            Pokemon pokemonJogador = jogador.getPokemon();
 
             /*
                 ==============================================
@@ -92,8 +90,7 @@ public class Batalha {
             System.out.println("2 - Usar Poção");
             System.out.println("3 - Fugir");
 
-            int escolha =
-                    scanner.nextInt();
+            int escolha = scanner.nextInt();
 
             /*
                 ==============================================
@@ -105,16 +102,9 @@ public class Batalha {
                 /*
                     Mostra movimentos
                 */
-                for (int i = 0;
-                     i < pokemonJogador
-                             .getMovimentos()
-                             .size();
-                     i++) {
+                for (int i = 0; i < pokemonJogador.getMovimentos().size(); i++) {
 
-                    Movimento m =
-                            pokemonJogador
-                                    .getMovimentos()
-                                    .get(i);
+                    Movimento m = pokemonJogador.getMovimentos().get(i);
 
                     System.out.println(
                             (i + 1)
@@ -130,22 +120,14 @@ public class Batalha {
                 /*
                     Escolha movimento
                 */
-                int movEscolha =
-                        scanner.nextInt();
+                int movEscolha = scanner.nextInt();
 
-                Movimento movimento =
-                        pokemonJogador
-                                .getMovimentos()
-                                .get(movEscolha - 1);
+                Movimento movimento = pokemonJogador.getMovimentos().get(movEscolha - 1);
 
                 /*
                     Jogador ataca
                 */
-                atacar(
-                        pokemonJogador,
-                        inimigo,
-                        movimento
-                );
+                atacar(pokemonJogador, inimigo, movimento);
             }
 
             /*
@@ -153,23 +135,67 @@ public class Batalha {
                 USAR POÇÃO
                 ==============================================
             */
-            else if (escolha == 2) {
-
-                jogador.usarPocao();
+            else if (escolha == 2) {jogador.usarPocao();
             }
 
             /*
-                ==============================================
-                FUGIR
-                ==============================================
-            */
+    ==============================================
+    FUGIR
+    ==============================================
+*/
             else if (escolha == 3) {
 
+    /*
+        Verifica tentativas restantes
+    */
+                if (tentativasFuga <= 0) {
+
+                    System.out.println(
+                            "Você não pode mais fugir!"
+                    );
+
+                    continue;
+                }
+
+    /*
+        Gasta tentativa
+    */
+                tentativasFuga--;
+
+    /*
+        Chance de fuga
+    */
+                int chance =
+                        random.nextInt(100) + 1;
+
+    /*
+        70% de chance
+    */
+                if (chance <= 70) {
+
+                    System.out.println(
+                            "Você fugiu da batalha!"
+                    );
+
+                    System.out.println(
+                            "Tentativas restantes: "
+                                    + tentativasFuga
+                    );
+
+                    return;
+                }
+
+    /*
+        Falhou ao fugir
+    */
                 System.out.println(
-                        "Você fugiu da batalha."
+                        "Falhou ao fugir!"
                 );
 
-                return;
+                System.out.println(
+                        "Tentativas restantes: "
+                                + tentativasFuga
+                );
             }
 
             /*
@@ -178,12 +204,7 @@ public class Batalha {
                 ==============================================
             */
             if (inimigo.estaDerrotado()) {
-
-                System.out.println(
-                        "\n"
-                                + inimigo.getNome()
-                                + " foi derrotado!"
-                );
+                System.out.println("\n" + inimigo.getNome() + " foi derrotado!");
 
                 /*
                     Dá XP
@@ -198,34 +219,17 @@ public class Batalha {
                 TURNO INIMIGO
                 ==============================================
             */
-            Movimento movimentoInimigo =
-                    inimigo.getMovimentos()
-                            .get(
-                                    random.nextInt(
-                                            inimigo
-                                                    .getMovimentos()
-                                                    .size()
-                                    )
-                            );
+            Movimento movimentoInimigo = inimigo.getMovimentos().get(random.nextInt(inimigo.getMovimentos().size()));
 
-            atacar(
-                    inimigo,
-                    pokemonJogador,
-                    movimentoInimigo
-            );
+            atacar(inimigo, pokemonJogador, movimentoInimigo);
 
             /*
                 ==============================================
                 VERIFICA DERROTA JOGADOR
                 ==============================================
             */
-            if (pokemonJogador
-                    .estaDerrotado()) {
-
-                System.out.println(
-                        "\nSeu Pokémon foi derrotado!"
-                );
-
+            if (pokemonJogador.estaDerrotado()) {
+                System.out.println("\nSeu Pokémon foi derrotado!");
                 return;
             }
         }
@@ -238,38 +242,19 @@ public class Batalha {
     */
     private void mostrarStatus() {
 
-        Pokemon jogadorPokemon =
-                jogador.getPokemon();
+        Pokemon jogadorPokemon = jogador.getPokemon();
 
         System.out.println("\n========================");
 
-        System.out.println(
-                jogadorPokemon.getNome()
-                        + " | LV "
-                        + jogadorPokemon.getLevel()
-        );
+        System.out.println(jogadorPokemon.getNome() + " | LV " + jogadorPokemon.getLevel());
 
-        System.out.println(
-                "HP: "
-                        + jogadorPokemon.getHp()
-                        + "/"
-                        + jogadorPokemon.getHpMax()
-        );
+        System.out.println("HP: " + jogadorPokemon.getHp() + "/" + jogadorPokemon.getHpMax());
 
         System.out.println("------------------------");
 
-        System.out.println(
-                inimigo.getNome()
-                        + " | LV "
-                        + inimigo.getLevel()
-        );
+        System.out.println(inimigo.getNome() + " | LV " + inimigo.getLevel());
 
-        System.out.println(
-                "HP: "
-                        + inimigo.getHp()
-                        + "/"
-                        + inimigo.getHpMax()
-        );
+        System.out.println("HP: " + inimigo.getHp() + "/" + inimigo.getHpMax());
 
         System.out.println("========================");
     }
@@ -285,18 +270,13 @@ public class Batalha {
         - Resistências
         ======================================================
     */
-    private void atacar(Pokemon atacante,
-                        Pokemon defensor,
-                        Movimento movimento) {
+    private void atacar(Pokemon atacante, Pokemon defensor, Movimento movimento) {
 
         /*
             Verifica PP
         */
         if (!movimento.usarPP()) {
-
-            System.out.println(
-                    "Sem PP."
-            );
+            System.out.println("Sem PP.");
 
             return;
         }
@@ -304,30 +284,20 @@ public class Batalha {
         /*
             Precisão
         */
-        int chance =
-                random.nextInt(100) + 1;
+        int chance = random.nextInt(100) + 1;
 
         /*
             Errou ataque
         */
-        if (chance
-                > movimento.getPrecisao()) {
-
-            System.out.println(
-                    atacante.getNome()
-                            + " errou o ataque!"
-            );
-
+        if (chance > movimento.getPrecisao()) {
+            System.out.println(atacante.getNome() + " errou o ataque!");
             return;
         }
 
         /*
             Cálculo dano base
         */
-        int dano =
-                movimento.getDano()
-                        + atacante.getAtaque()/2
-                        - defensor.getDefesa()/3;
+        int dano = movimento.getDano() + atacante.getAtaque()/2 - defensor.getDefesa()/3;
         System.out.println("Movimento:" + movimento.getDano());
         System.out.println("Ataque: "+ atacante.getAtaque());
         System.out.println("Defesa: " + defensor.getDefesa());
@@ -363,31 +333,17 @@ public class Batalha {
         /*
             Mensagens
         */
-        System.out.println(
-                atacante.getNome()
-                        + " usou "
-                        + movimento.getNome()
-        );
+        System.out.println(atacante.getNome() + " usou " + movimento.getNome());
 
         if (multiplicador > 1) {
-
-            System.out.println(
-                    "É super efetivo!"
-            );
+            System.out.println("É super efetivo!");
         }
 
         else if (multiplicador < 1) {
-
-            System.out.println(
-                    "Não foi muito efetivo..."
-            );
+            System.out.println("Não foi muito efetivo...");
         }
 
-        System.out.println(
-                "Causou "
-                        + dano
-                        + " de dano!"
-        );
+        System.out.println("Causou " + dano + " de dano!");
     }
 
     /*
@@ -395,65 +351,49 @@ public class Batalha {
         SISTEMA DE FRAQUEZAS E VANTAGENS
         ======================================================
     */
-    private double calcularFraqueza(
-            String tipoAtaque,
-            Pokemon defensor
-    ) {
+    private double calcularFraqueza(String tipoAtaque, Pokemon defensor) {
 
-        for (String tipoDefensor
-                : defensor.getTipos()) {
+        for (String tipoDefensor : defensor.getTipos()) {
 
             /*
                 FIRE > GRASS
             */
-            if (tipoAtaque.equalsIgnoreCase("fire")
-                    && tipoDefensor.equalsIgnoreCase("grass")) {
-
+            if (tipoAtaque.equalsIgnoreCase("fire") && tipoDefensor.equalsIgnoreCase("grass")) {
                 return 2.0;
             }
 
             /*
                 WATER > FIRE
             */
-            if (tipoAtaque.equalsIgnoreCase("water")
-                    && tipoDefensor.equalsIgnoreCase("fire")) {
-
+            if (tipoAtaque.equalsIgnoreCase("water") && tipoDefensor.equalsIgnoreCase("fire")) {
                 return 2.0;
             }
 
             /*
                 GRASS > WATER
             */
-            if (tipoAtaque.equalsIgnoreCase("grass")
-                    && tipoDefensor.equalsIgnoreCase("water")) {
-
+            if (tipoAtaque.equalsIgnoreCase("grass") && tipoDefensor.equalsIgnoreCase("water")) {
                 return 2.0;
             }
 
             /*
                 GRASS < FIRE
             */
-            if (tipoAtaque.equalsIgnoreCase("grass")
-                    && tipoDefensor.equalsIgnoreCase("fire")) {
-
+            if (tipoAtaque.equalsIgnoreCase("grass") && tipoDefensor.equalsIgnoreCase("fire")) {
                 return 0.5;
             }
 
             /*
                 FIRE < WATER
             */
-            if (tipoAtaque.equalsIgnoreCase("fire")
-                    && tipoDefensor.equalsIgnoreCase("water")) {
-
+            if (tipoAtaque.equalsIgnoreCase("fire") && tipoDefensor.equalsIgnoreCase("water")) {
                 return 0.5;
             }
 
             /*
                 WATER < GRASS
             */
-            if (tipoAtaque.equalsIgnoreCase("water")
-                    && tipoDefensor.equalsIgnoreCase("grass")) {
-
+            if (tipoAtaque.equalsIgnoreCase("water") && tipoDefensor.equalsIgnoreCase("grass")) {
                 return 0.5;
             }
         }
